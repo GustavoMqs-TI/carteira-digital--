@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Controle Financeiro</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- TELA DE LOGIN -->
+<div id="telaLogin" class="tela-login">
+    <div class="login-container">
+        <div class="login-header">
+            <h1>💰 Controle Financeiro</h1>
+            <p>Gerencie suas finanças com segurança</p>
+        </div>
+        
+        <form id="formLogin" class="login-form">
+            <div class="input-group">
+                <label>📧 E-mail</label>
+                <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+            </div>
+            
+            <div class="input-group">
+                <label>🔒 Senha</label>
+                <input type="password" id="loginSenha" placeholder="Digite sua senha" required>
+            </div>
+            
+            <button type="submit" class="btn-login">Entrar</button>
+            
+            <div class="login-links">
+                <a href="#" onclick="mostrarRegistro()">Criar nova conta</a>
+                <a href="#" onclick="mostrarRecuperarSenha()">Esqueceu a senha?</a>
+            </div>
+        </form>
+        
+        <div class="demo-info">
+            <p>📱 Conta Demo:</p>
+            <p>Email: demo@financeiro.com</p>
+            <p>Senha: 123456</p>
+        </div>
+    </div>
+</div>
+
+<!-- TELA DE REGISTRO -->
+<div id="telaRegistro" class="tela-login" style="display: none;">
+    <div class="login-container">
+        <div class="login-header">
+            <h1>💰 Criar Conta</h1>
+            <p>Cadastre-se para começar</p>
+        </div>
+        
+        <form id="formRegistro" class="login-form">
+            <div class="input-group">
+                <label>👤 Nome</label>
+                <input type="text" id="regNome" placeholder="Seu nome" required>
+            </div>
+            
+            <div class="input-group">
+                <label>📧 E-mail</label>
+                <input type="email" id="regEmail" placeholder="seu@email.com" required>
+            </div>
+            
+            <div class="input-group">
+                <label>🔒 Senha</label>
+                <input type="password" id="regSenha" placeholder="Mínimo 6 caracteres" required>
+            </div>
+            
+            <div class="input-group">
+                <label>🔒 Confirmar Senha</label>
+                <input type="password" id="regConfirmarSenha" placeholder="Digite a senha novamente" required>
+            </div>
+            
+            <button type="submit" class="btn-login">Criar Conta</button>
+            
+            <div class="login-links">
+                <a href="#" onclick="mostrarLogin()">Já tenho uma conta</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- TELA DE RECUPERAR SENHA -->
+<div id="telaRecuperar" class="tela-login" style="display: none;">
+    <div class="login-container">
+        <div class="login-header">
+            <h1>🔑 Recuperar Senha</h1>
+            <p>Enviaremos um link para seu e-mail</p>
+        </div>
+        
+        <form id="formRecuperar" class="login-form">
+            <div class="input-group">
+                <label>📧 E-mail</label>
+                <input type="email" id="recEmail" placeholder="seu@email.com" required>
+            </div>
+            
+            <button type="submit" class="btn-login">Enviar Link</button>
+            
+            <div class="login-links">
+                <a href="#" onclick="mostrarLogin()">Voltar para o login</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- TELA DE CONFIGURAÇÃO PERSONALIZADA -->
+<div id="telaConfiguracao" class="tela-login" style="display: none;">
+    <div class="login-container" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+        <div class="login-header">
+            <h1>⚙️ Personalize seu Sistema</h1>
+            <p>Configure seus benefícios, bancos e formas de pagamento</p>
+        </div>
+        
+        <form id="formConfiguracao" class="login-form">
+            <div class="config-section">
+                <h3>🎁 Seus Benefícios</h3>
+                <p class="config-desc">Quais benefícios você recebe? (Ex: VR, VA, VT)</p>
+                <div class="config-sugestoes">
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaBeneficiosConfig', 'VR')">+ VR</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaBeneficiosConfig', 'VA')">+ VA</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaBeneficiosConfig', 'VT')">+ VT</button>
+                </div>
+                <div id="listaBeneficiosConfig" class="config-lista">
+                    <div class="config-item"><input type="text" class="config-input" value="VR"><button type="button" onclick="removerItemConfig(this)" class="btn-remover">✖</button></div>
+                    <div class="config-item"><input type="text" class="config-input" value="VA"><button type="button" onclick="removerItemConfig(this)" class="btn-remover">✖</button></div>
+                    <div class="config-item"><input type="text" class="config-input" value="VT"><button type="button" onclick="removerItemConfig(this)" class="btn-remover">✖</button></div>
+                </div>
+                <button type="button" onclick="adicionarItemConfig('listaBeneficiosConfig')" class="btn-adicionar">+ Adicionar Benefício</button>
+            </div>
+            
+            <div class="config-section">
+                <h3>🏦 Seus Bancos</h3>
+                <p class="config-desc">Quais bancos você utiliza?</p>
+                <div class="config-sugestoes">
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaBancosConfig', 'Nubank')">+ Nubank</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaBancosConfig', 'Itaú')">+ Itaú</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaBancosConfig', 'Santander')">+ Santander</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaBancosConfig', 'Bradesco')">+ Bradesco</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaBancosConfig', 'Caixa')">+ Caixa</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaBancosConfig', 'Banco do Brasil')">+ BB</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaBancosConfig', 'Inter')">+ Inter</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaBancosConfig', 'C6 Bank')">+ C6</button>
+                </div>
+                <div id="listaBancosConfig" class="config-lista">
+                    <div class="config-item"><input type="text" class="config-input" value="Nubank"><button type="button" onclick="removerItemConfig(this)" class="btn-remover">✖</button></div>
+                    <div class="config-item"><input type="text" class="config-input" value="Itaú"><button type="button" onclick="removerItemConfig(this)" class="btn-remover">✖</button></div>
+                    <div class="config-item"><input type="text" class="config-input" value="Santander"><button type="button" onclick="removerItemConfig(this)" class="btn-remover">✖</button></div>
+                    <div class="config-item"><input type="text" class="config-input" value="Bradesco"><button type="button" onclick="removerItemConfig(this)" class="btn-remover">✖</button></div>
+                </div>
+                <button type="button" onclick="adicionarItemConfig('listaBancosConfig')" class="btn-adicionar">+ Adicionar Banco</button>
+            </div>
+            
+            <div class="config-section">
+                <h3>💳 Formas de Pagamento</h3>
+                <p class="config-desc">Quais formas de pagamento você usa?</p>
+                <div class="config-sugestoes">
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaModalidadesConfig', 'Dinheiro')">+ Dinheiro</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaModalidadesConfig', 'Débito')">+ Débito</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaModalidadesConfig', 'Crédito')">+ Crédito</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaModalidadesConfig', 'Pix')">+ Pix</button>
+                    <button type="button" class="btn-sugestao" onclick="adicionarSugestao('listaModalidadesConfig', 'Boleto')">+ Boleto</button>
+                </div>
+                <div id="listaModalidadesConfig" class="config-lista">
+                    <div class="config-item"><input type="text" class="config-input" value="Dinheiro"><button type="button" onclick="removerItemConfig(this)" class="btn-remover">✖</button></div>
+                    <div class="config-item"><input type="text" class="config-input" value="Débito"><button type="button" onclick="removerItemConfig(this)" class="btn-remover">✖</button></div>
+                    <div class="config-item"><input type="text" class="config-input" value="Crédito"><button type="button" onclick="removerItemConfig(this)" class="btn-remover">✖</button></div>
+                    <div class="config-item"><input type="text" class="config-input" value="Pix"><button type="button" onclick="removerItemConfig(this)" class="btn-remover">✖</button></div>
+                </div>
+                <button type="button" onclick="adicionarItemConfig('listaModalidadesConfig')" class="btn-adicionar">+ Adicionar Forma de Pagamento</button>
+            </div>
+            
+            <button type="submit" class="btn-login">💾 Salvar e Continuar</button>
+        </form>
+    </div>
+</div>
+
+<!-- TELA DE PERFIL -->
+<div id="telaPerfil" class="tela-login" style="display: none;">
+    <div class="login-container" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
+        <div class="login-header">
+            <h1>👤 Meu Perfil</h1>
+            <p>Configure suas preferências</p>
+        </div>
+        <div class="perfil-menu">
+            <button onclick="abrirConfiguracoes()" class="btn-perfil">⚙️ Editar Configurações</button>
+            <button onclick="abrirPersonalizacaoCores()" class="btn-perfil">🎨 Personalizar Cores</button>
+            <button onclick="fecharPerfil()" class="btn-perfil-voltar">← Voltar ao Sistema</button>
+        </div>
+        <div id="perfilInfo" class="perfil-info"></div>
+    </div>
+</div>
+
+<!-- TELA DE PERSONALIZAÇÃO DE CORES -->
+<div id="telaCores" class="tela-login" style="display: none;">
+    <div class="login-container tela-cores-container" style="max-width: 650px; max-height: 85vh; overflow-y: auto; padding: 25px;">
+        <div class="login-header" style="margin-bottom: 20px;">
+            <h1 style="font-size: 24px;">🎨 Personalizar Cores</h1>
+            <p style="font-size: 13px; color: #666;">Escolha as cores dos seus cards</p>
+        </div>
+        
+        <form id="formCores">
+            <div class="section-cores">
+                <h3>📊 Cards do Resumo Geral</h3>
+                <div class="cores-grid-modern">
+                    <div class="cor-item-modern">
+                        <label>Entradas</label>
+                        <input type="color" id="corEntrada" value="#00b09b">
+                    </div>
+                    <div class="cor-item-modern">
+                        <label>Saídas</label>
+                        <input type="color" id="corSaida" value="#ff416c">
+                    </div>
+                    <div class="cor-item-modern">
+                        <label>Saldo</label>
+                        <input type="color" id="corSaldo" value="#2193b0">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-cores">
+                <h3>🎁 Cards de Benefícios</h3>
+                <div id="listaCoresBeneficios" class="lista-cores-modern"></div>
+            </div>
+            
+            <div class="section-cores">
+                <h3>💳 Cards de Bancos</h3>
+                <div id="listaCoresBancos" class="lista-cores-modern"></div>
+            </div>
+            
+            <div class="modal-botoes" style="margin-top: 20px; gap: 12px;">
+                <button type="submit" class="btn-salvar" style="flex: 1; padding: 10px;">💾 Salvar Cores</button>
+                <button type="button" class="btn-cancelar" style="flex: 1; padding: 10px;" onclick="fecharTelaCores()">❌ Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- SISTEMA PRINCIPAL -->
+<div id="sistemaPrincipal" style="display: none;">
+<div class="container">
+<div class="user-info">
+    <span>👋 Olá, <span id="userNome"></span>!</span>
+    <div>
+        <button onclick="abrirPersonalizacaoCores()" class="btn-cores">🎨 Cores</button>
+        <button onclick="abrirPerfil()" class="btn-perfil-sistema">👤 Perfil</button>
+        <button onclick="logout()" class="btn-logout">🚪 Sair</button>
+    </div>
+</div>
+
+<h1>💰 Controle Financeiro</h1>
+
+<div class="abas">
+<button id="btnGeral" class="active" onclick="trocarAba('geral')">Geral</button>
+<button id="btnBeneficios" onclick="trocarAba('beneficios')">Benefícios</button>
+<button id="btnFatura" onclick="trocarAba('fatura')">Fatura</button>
+</div>
+
+<!-- ABA GERAL -->
+<div id="abaGeral" class="aba ativa">
+<div class="resumo">
+    <div class="card entrada"><h3>Entradas</h3><p id="totalEntrada">R$ 0</p></div>
+    <div class="card saida"><h3>Saídas</h3><p id="totalSaida">R$ 0</p></div>
+    <div class="card saldo"><h3>Saldo</h3><p id="saldoFinal">R$ 0</p></div>
+</div>
+
+<form id="formGasto">
+    <input id="descricao" placeholder="Descrição" required>
+    <input id="valor" type="number" step="0.01" placeholder="Valor" required>
+    <select id="tipo" required><option value="">Tipo</option><option value="entrada">Entrada</option><option value="saida">Saída</option></select>
+    <select id="banco"><option value="">Banco</option></select>
+    <select id="modalidade" required><option value="">Modalidade</option></select>
+    <input id="data" type="date" required>
+    <button type="submit">Adicionar</button>
+</form>
+
+<div class="checkbox-group">
+    <div onclick="toggleFiltros()" class="filtro-titulo"><h3>🔍 Filtrar</h3><span id="iconeFiltro">▼</span></div>
+    <div id="filtrosContainer">
+        <div><label>Banco</label><div id="filtroBanco"></div></div>
+        <div><label>Modalidade</label><div id="filtroModalidade"></div></div>
+        <div><label>Tipo</label><div id="filtroTipo"><label><input type="checkbox" value="entrada"> <span class="verde">Entrada</span></label><label><input type="checkbox" value="saida"> <span class="vermelho">Saída</span></label></div></div>
+        <div class="botoes-filtro"><button type="button" id="btnAplicarFiltro">Aplicar</button><button type="button" id="btnLimparFiltro">Limpar</button></div>
+    </div>
+</div>
+
+<div id="contadorResultados"></div>
+<div class="tabela-container">
+<table>
+<thead>
+<tr>
+<th>Descrição</th>
+<th>Valor</th>
+<th>Tipo</th>
+<th>Modalidade</th>
+<th>Banco</th>
+<th>Data</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody id="listaGastos"></tbody>
+</table>
+</div>
+</div>
+
+<!-- BENEFICIOS -->
+<div id="abaBeneficios" class="aba">
+<div class="fatura-cards" id="beneficiosContainer"></div>
+
+<div class="filtro-container">
+    <div onclick="toggleFiltrosBeneficio()" class="filtro-header"><h3>🔍 Filtrar Transações</h3><span id="iconeFiltroBeneficio">▼</span></div>
+    <div id="filtrosBeneficioContent" class="filtros-content">
+        <div class="filtros-grid">
+            <div class="filtro-group"><label>📅 Período</label><div class="filtro-datas"><input type="date" id="filtroBeneficioDataInicio"><span>até</span><input type="date" id="filtroBeneficioDataFim"></div></div>
+            <div class="filtro-group"><label>💰 Valor</label><div class="filtro-valores"><input type="number" step="0.01" id="filtroBeneficioValorMin" placeholder="Mínimo"><span>até</span><input type="number" step="0.01" id="filtroBeneficioValorMax" placeholder="Máximo"></div></div>
+            <div class="filtro-group"><label>🔎 Descrição</label><input type="text" id="filtroBeneficioDescricao" placeholder="Buscar..." class="filtro-input-full"></div>
+            <div class="filtro-group"><label>📊 Tipo</label><select id="filtroBeneficioTipo" class="filtro-select"><option value="todos">Todos</option><option value="entrada">Entradas</option><option value="saida">Saídas</option></select></div>
+            <div class="filtro-group"><label>📊 Ordenar</label><select id="filtroBeneficioOrdenar" class="filtro-select"><option value="data_desc">Data mais recente</option><option value="data_asc">Data mais antiga</option><option value="valor_desc">Maior valor</option><option value="valor_asc">Menor valor</option></select></div>
+        </div>
+        <div class="filtro-actions"><button type="button" id="btnAplicarFiltroBeneficio" class="btn-aplicar">Aplicar</button><button type="button" id="btnLimparFiltroBeneficio" class="btn-limpar">Limpar</button></div>
+    </div>
+</div>
+
+<div class="resultado-area"><div class="resultado-header"><h4>Transações do Benefício</h4><div id="beneficioFiltroAtivo" class="banco-ativo"></div><div id="filtrosAtivosBeneficio" class="filtros-ativos"></div></div><div class="tabela-container"><table><thead><tr><th>Descrição</th><th>Valor</th><th>Tipo</th><th>Data</th></tr></thead><tbody id="listaBeneficioFiltrado"></tbody></table></div></div>
+</div>
+
+<!-- FATURA -->
+<div id="abaFatura" class="aba">
+<div class="fatura-cards" id="faturaContainer"></div>
+
+<div class="filtro-container">
+    <div onclick="toggleFiltrosFatura()" class="filtro-header"><h3>🔍 Filtrar Compras</h3><span id="iconeFiltroFatura">▼</span></div>
+    <div id="filtrosFaturaContent" class="filtros-content">
+        <div class="filtros-grid">
+            <div class="filtro-group"><label>📅 Período</label><div class="filtro-datas"><input type="date" id="filtroDataInicio"><span>até</span><input type="date" id="filtroDataFim"></div></div>
+            <div class="filtro-group"><label>💰 Valor</label><div class="filtro-valores"><input type="number" step="0.01" id="filtroValorMin" placeholder="Mínimo"><span>até</span><input type="number" step="0.01" id="filtroValorMax" placeholder="Máximo"></div></div>
+            <div class="filtro-group"><label>🔎 Descrição</label><input type="text" id="filtroDescricao" placeholder="Buscar..." class="filtro-input-full"></div>
+            <div class="filtro-group"><label>📊 Ordenar</label><select id="filtroOrdenar" class="filtro-select"><option value="data_desc">Data mais recente</option><option value="data_asc">Data mais antiga</option><option value="valor_desc">Maior valor</option><option value="valor_asc">Menor valor</option></select></div>
+        </div>
+        <div class="filtro-actions"><button type="button" id="btnAplicarFiltroFatura" class="btn-aplicar">Aplicar</button><button type="button" id="btnLimparFiltroFatura" class="btn-limpar">Limpar</button></div>
+    </div>
+</div>
+
+<div class="resultado-area"><div class="resultado-header"><h4 id="tituloFaturaFiltro">Compras no Crédito (pendentes)</h4><div id="filtroBancoAtivo" class="banco-ativo"></div><div id="filtrosAtivosFatura" class="filtros-ativos"></div></div><div class="tabela-container"><table><thead><tr><th>Descrição</th><th>Valor</th><th>Banco</th><th>Data</th><th>Modalidade</th></tr></thead><tbody id="listaFatura"></tbody></table></div></div>
+</div>
+
+</div>
+
+<!-- MODAL DE EDIÇÃO -->
+<div id="modalEditar" class="modal" style="display: none;">
+<div class="modal-content"><span class="fechar-modal">&times;</span><h2>✏️ Editar Lançamento</h2>
+<form id="formEditar"><input type="hidden" id="editarId"><input id="editarDescricao" placeholder="Descrição" required><input id="editarValor" type="number" step="0.01" placeholder="Valor" required>
+<select id="editarTipo" required><option value="">Tipo</option><option value="entrada">Entrada</option><option value="saida">Saída</option></select>
+<select id="editarBanco"><option value="">Banco</option></select>
+<select id="editarModalidade" required><option value="">Modalidade</option></select>
+<input id="editarData" type="date" required>
+<div class="modal-botoes"><button type="submit" class="btn-salvar">Salvar</button><button type="button" class="btn-cancelar">Cancelar</button></div>
+</form></div></div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
