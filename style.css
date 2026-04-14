@@ -316,9 +316,11 @@ form input, form select {
     font-size: 14px;
 }
 
+/* AJUSTES DO CAMPO DE DATA */
 input[type="date"] {
     min-width: 130px;
     font-family: Arial, Helvetica, sans-serif;
+    position: relative;
 }
 
 input[type="date"]::-webkit-datetime-edit-text,
@@ -326,6 +328,16 @@ input[type="date"]::-webkit-datetime-edit-month-field,
 input[type="date"]::-webkit-datetime-edit-day-field,
 input[type="date"]::-webkit-datetime-edit-year-field {
     color: #666;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    background-color: rgba(0,0,0,0.05);
 }
 
 form button {
@@ -403,14 +415,18 @@ form button {
 #filtroBanco::-webkit-scrollbar,
 #filtroModalidade::-webkit-scrollbar,
 #filtroTipo::-webkit-scrollbar,
-#filtrosContainer::-webkit-scrollbar {
+#filtrosContainer::-webkit-scrollbar,
+#filtrosBeneficioContent::-webkit-scrollbar,
+#filtrosFaturaContent::-webkit-scrollbar {
     width: 6px;
 }
 
 #filtroBanco::-webkit-scrollbar-track,
 #filtroModalidade::-webkit-scrollbar-track,
 #filtroTipo::-webkit-scrollbar-track,
-#filtrosContainer::-webkit-scrollbar-track {
+#filtrosContainer::-webkit-scrollbar-track,
+#filtrosBeneficioContent::-webkit-scrollbar-track,
+#filtrosFaturaContent::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
@@ -418,7 +434,9 @@ form button {
 #filtroBanco::-webkit-scrollbar-thumb,
 #filtroModalidade::-webkit-scrollbar-thumb,
 #filtroTipo::-webkit-scrollbar-thumb,
-#filtrosContainer::-webkit-scrollbar-thumb {
+#filtrosContainer::-webkit-scrollbar-thumb,
+#filtrosBeneficioContent::-webkit-scrollbar-thumb,
+#filtrosFaturaContent::-webkit-scrollbar-thumb {
     background: #667eea;
     border-radius: 10px;
 }
@@ -561,6 +579,103 @@ form button {
 #btnLimparFiltro { background: #ff416c; color: white; }
 #btnLimparFiltro:hover { background: #e63e67; }
 
+/* FILTROS DE BENEFÍCIO E FATURA - COM ROLAGEM */
+.filtro-container {
+    background: #f5f6fa;
+    border-radius: 12px;
+    margin: 12px 0;
+    overflow: hidden;
+}
+
+.filtro-header {
+    padding: 10px 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    background: #f5f6fa;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#filtrosBeneficioContent, #filtrosFaturaContent {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+    padding: 0 16px 12px 16px;
+}
+
+.filtros-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.filtro-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filtro-group label {
+    font-weight: bold;
+    color: #555;
+    font-size: 13px;
+}
+
+.filtro-datas, .filtro-valores {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filtro-datas input, .filtro-valores input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    min-width: 100px;
+}
+
+.filtro-input-full {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+}
+
+.filtro-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+}
+
+.filtro-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 12px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-aplicar, .btn-limpar {
+    padding: 8px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-aplicar { background: linear-gradient(135deg, #00b09b, #96c93d); color: white; }
+.btn-limpar { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; }
+
 /* CONTADOR DE RESULTADOS - FUNDO ESCURO COM TEXTO BRANCO LEGÍVEL */
 #contadorResultados {
     background: #343a40;
@@ -675,102 +790,6 @@ button.excluir-btn {
     opacity: 0.8;
     margin-top: 8px;
 }
-
-/* FILTROS AVANÇADOS */
-.filtro-container {
-    background: #f5f6fa;
-    border-radius: 12px;
-    margin: 12px 0;
-    overflow: hidden;
-}
-
-.filtro-header {
-    padding: 10px 16px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    background: #f5f6fa;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.filtros-content {
-    max-height: 500px;
-    overflow: hidden;
-    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
-    padding: 0 16px 12px 16px;
-}
-
-.filtros-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.filtro-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.filtro-group label {
-    font-weight: bold;
-    color: #555;
-    font-size: 13px;
-}
-
-.filtro-datas, .filtro-valores {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.filtro-datas input, .filtro-valores input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: white;
-    min-width: 100px;
-}
-
-.filtro-input-full {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: white;
-}
-
-.filtro-select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: white;
-    cursor: pointer;
-}
-
-.filtro-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    padding-top: 12px;
-    border-top: 1px solid #e0e0e0;
-}
-
-.btn-aplicar, .btn-limpar {
-    padding: 8px 24px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.btn-aplicar { background: linear-gradient(135deg, #00b09b, #96c93d); color: white; }
-.btn-limpar { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; }
 
 .resultado-area {
     margin-top: 10px;
@@ -1237,13 +1256,15 @@ button.excluir-btn {
         font-size: 15px;
     }
     
-    /* Ajuste dos filtros no mobile */
+    /* Ajuste dos filtros no mobile - TODAS AS ABAS */
     .abas button {
         padding: 8px 16px;
         font-size: 13px;
     }
     
-    #filtrosContainer {
+    #filtrosContainer,
+    #filtrosBeneficioContent,
+    #filtrosFaturaContent {
         max-height: 350px;
     }
     
@@ -1258,23 +1279,7 @@ button.excluir-btn {
         font-size: 12px;
     }
     
-    /* Contador de resultados */
-    #contadorResultados {
-        font-size: 12px;
-        padding: 10px 15px;
-    }
-    
-    /* Cards de benefícios e fatura */
-    .fatura-cards {
-        grid-template-columns: 1fr;
-    }
-    
-    .beneficio-card, .fatura-cards .card {
-        min-width: auto;
-        padding: 15px;
-    }
-    
-    /* Filtros avançados */
+    /* FILTROS AVANÇADOS MOBILE */
     .filtros-grid {
         grid-template-columns: 1fr;
     }
@@ -1295,7 +1300,23 @@ button.excluir-btn {
         width: 100%;
     }
     
-    /* Formulário */
+    /* CONTADOR DE RESULTADOS */
+    #contadorResultados {
+        font-size: 12px;
+        padding: 10px 15px;
+    }
+    
+    /* CARDS DE BENEFÍCIOS E FATURA */
+    .fatura-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .beneficio-card, .fatura-cards .card {
+        min-width: auto;
+        padding: 15px;
+    }
+    
+    /* FORMULÁRIO MOBILE */
     form {
         flex-direction: column;
     }
@@ -1304,13 +1325,64 @@ button.excluir-btn {
         width: 100%;
     }
     
+    /* CAMPO DE DATA MOBILE - CORRIGIDO */
     input[type="date"] {
         width: 100%;
         padding: 12px;
         font-size: 16px;
+        min-width: auto;
+        text-align: left;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        position: relative;
+        display: block;
+        box-sizing: border-box;
     }
     
-    /* Header */
+    /* Placeholder para o campo de data no mobile */
+    input[type="date"]:before {
+        content: attr(placeholder);
+        color: #999;
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: white;
+        padding: 0 4px;
+        pointer-events: none;
+    }
+    
+    input[type="date"]:focus:before,
+    input[type="date"]:valid:before {
+        display: none;
+    }
+    
+    /* Garantir que o texto da data fique visível */
+    input[type="date"]::-webkit-datetime-edit {
+        padding-left: 4px;
+    }
+    
+    input[type="date"]::-webkit-datetime-edit-text,
+    input[type="date"]::-webkit-datetime-edit-month-field,
+    input[type="date"]::-webkit-datetime-edit-day-field,
+    input[type="date"]::-webkit-datetime-edit-year-field {
+        color: #333;
+        font-size: 14px;
+    }
+    
+    /* Ícone do calendário no mobile */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        padding: 8px;
+        background-color: transparent;
+    }
+    
+    /* HEADER MOBILE */
     .user-info {
         flex-direction: column;
         text-align: center;
@@ -1324,7 +1396,7 @@ button.excluir-btn {
         margin: 0;
     }
     
-    /* Resultado area */
+    /* RESULTADO AREA */
     .resultado-area {
         margin-top: 10px;
         padding: 12px;
@@ -1335,7 +1407,7 @@ button.excluir-btn {
         padding-bottom: 8px;
     }
     
-    /* Container principal */
+    /* CONTAINER PRINCIPAL */
     .container {
         padding: 15px;
     }
@@ -1348,7 +1420,7 @@ button.excluir-btn {
         min-width: auto;
     }
     
-    /* Cores */
+    /* CORES */
     .cores-grid-modern {
         grid-template-columns: 1fr;
         gap: 10px;
@@ -1362,7 +1434,7 @@ button.excluir-btn {
         white-space: normal;
     }
     
-    /* Configurações */
+    /* CONFIGURAÇÕES */
     .config-section {
         padding: 15px;
     }
@@ -1372,7 +1444,7 @@ button.excluir-btn {
         font-size: 11px;
     }
     
-    /* Modal */
+    /* MODAL */
     .modal-content {
         width: 95%;
         padding: 15px;
@@ -1385,13 +1457,13 @@ button.excluir-btn {
         flex-direction: column;
     }
     
-    /* Inputs e botões para toque */
+    /* INPUTS E BOTÕES PARA TOQUE */
     input, select, button {
         font-size: 16px !important;
         min-height: 44px;
     }
     
-    /* Perfil */
+    /* PERFIL */
     .perfil-info ul {
         flex-direction: column;
     }
@@ -1446,7 +1518,9 @@ button.excluir-btn {
         font-size: 24px;
     }
     
-    #filtrosContainer {
+    #filtrosContainer,
+    #filtrosBeneficioContent,
+    #filtrosFaturaContent {
         max-height: 300px;
     }
     
@@ -1470,7 +1544,9 @@ button.excluir-btn {
         max-height: 300px;
     }
     
-    #filtrosContainer {
+    #filtrosContainer,
+    #filtrosBeneficioContent,
+    #filtrosFaturaContent {
         max-height: 250px;
     }
     
