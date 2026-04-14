@@ -124,6 +124,8 @@ h1 {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .login-links a {
@@ -159,11 +161,19 @@ h1 {
     padding: 10px 15px;
     background: #f5f6fa;
     border-radius: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .user-info span {
     font-weight: bold;
     color: #333;
+}
+
+.user-info div {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .btn-logout, .btn-perfil-sistema, .btn-cores {
@@ -173,7 +183,6 @@ h1 {
     cursor: pointer;
     font-size: 13px;
     transition: all 0.3s ease;
-    margin-left: 8px;
 }
 
 .btn-cores {
@@ -195,7 +204,7 @@ h1 {
     transform: translateY(-1px);
 }
 
-/* ABAS */
+/* ABAS - TAMANHO ORIGINAL */
 .abas {
     display: flex;
     gap: 10px;
@@ -287,6 +296,7 @@ h1 {
 
 .card p {
     font-size: 24px;
+    word-break: break-word;
 }
 
 /* FORMULARIO */
@@ -328,7 +338,7 @@ form button {
     font-weight: bold;
 }
 
-/* FILTROS GERAIS */
+/* FILTROS GERAIS - COM ROLAGEM PARA ACESSAR BOTÕES */
 .checkbox-group {
     background: #f5f6fa;
     border-radius: 12px;
@@ -345,9 +355,10 @@ form button {
     font-weight: bold;
 }
 
-#filtrosContainer, #filtrosFaturaContent, #filtrosBeneficioContent {
-    max-height: 500px;
-    overflow: hidden;
+#filtrosContainer {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
     transition: 0.3s;
     padding: 0 20px 20px 20px;
 }
@@ -357,83 +368,132 @@ form button {
     padding: 0 20px !important;
 }
 
+/* CONTAINER DOS CHECKBOXES COM ROLAGEM VERTICAL */
 #filtroBanco, #filtroModalidade {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+    flex-direction: column;
+    gap: 6px;
     margin-top: 10px;
     margin-bottom: 20px;
+    max-height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
 }
 
+/* CONTAINER DO TIPO COM ROLAGEM VERTICAL */
+#filtroTipo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px 0 20px 0;
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+/* Estilização da scrollbar */
+#filtroBanco::-webkit-scrollbar,
+#filtroModalidade::-webkit-scrollbar,
+#filtroTipo::-webkit-scrollbar,
+#filtrosContainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+#filtroBanco::-webkit-scrollbar-track,
+#filtroModalidade::-webkit-scrollbar-track,
+#filtroTipo::-webkit-scrollbar-track,
+#filtrosContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+#filtroBanco::-webkit-scrollbar-thumb,
+#filtroModalidade::-webkit-scrollbar-thumb,
+#filtroTipo::-webkit-scrollbar-thumb,
+#filtrosContainer::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
+
+/* CHECKBOX QUADRADO - LARGURA = ALTURA */
 .checkbox-group label {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
-    padding: 8px 15px;
-    border-radius: 20px;
+    padding: 6px 10px;
+    border-radius: 6px;
     background: white;
     border: 1px solid #ddd;
     transition: all 0.3s ease;
+    font-size: 12px;
 }
 
 .checkbox-group label:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .checkbox-group input[type="checkbox"] {
     appearance: none;
-    width: 18px;
-    height: 18px;
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
     border: 2px solid #667eea;
-    border-radius: 4px;
+    border-radius: 3px;
     cursor: pointer;
     position: relative;
+    flex-shrink: 0;
+    background: white;
 }
 
 .checkbox-group input[type="checkbox"]:checked {
     background-color: #667eea;
+    border-color: #667eea;
 }
 
 .checkbox-group input[type="checkbox"]:checked::after {
     content: '✓';
     position: absolute;
     color: white;
-    font-size: 12px;
+    font-size: 10px;
+    font-weight: bold;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-/* FILTROS DE TIPO */
-#filtroTipo {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin: 15px 0 20px 0;
-}
-
+/* ESTILO PARA OS LABELS DO TIPO */
 #filtroTipo label {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    padding: 10px 30px;
-    border-radius: 25px;
+    padding: 6px 12px;
+    border-radius: 6px;
     transition: all 0.3s ease;
     background: white;
     border: 1px solid #ddd;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
 }
 
 #filtroTipo label:first-child {
-    border-left: 4px solid #00b09b;
+    border-left: 3px solid #00b09b;
 }
 
 #filtroTipo label:last-child {
-    border-left: 4px solid #ff416c;
+    border-left: 3px solid #ff416c;
 }
 
 #filtroTipo label:first-child span {
@@ -446,37 +506,87 @@ form button {
     font-weight: bold;
 }
 
-#filtroTipo label:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+#filtroTipo input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
+    border: 2px solid #667eea;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    background: white;
 }
 
+#filtroTipo input[type="checkbox"]:checked {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+#filtroTipo input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* BOTÕES DO FILTRO - FICAM DENTRO DA ROLAGEM */
 .botoes-filtro {
     display: flex;
     gap: 10px;
-    margin: 10px 0;
+    margin: 10px 0 5px 0;
+    flex-wrap: wrap;
+    padding: 5px 0;
 }
 
 #btnAplicarFiltro, #btnLimparFiltro {
-    padding: 6px 16px;
+    padding: 8px 20px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 #btnAplicarFiltro { background: #00b09b; color: white; }
-#btnLimparFiltro { background: #ff416c; color: white; }
+#btnAplicarFiltro:hover { background: #008a7a; }
 
-/* ===== TABELA GERAL - VERSÃO DESKTOP (PADRÃO) ===== */
+#btnLimparFiltro { background: #ff416c; color: white; }
+#btnLimparFiltro:hover { background: #e63e67; }
+
+/* CONTADOR DE RESULTADOS - FUNDO ESCURO COM TEXTO BRANCO LEGÍVEL */
+#contadorResultados {
+    background: #343a40;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin: 15px 0;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* TABELA GERAL */
 .tabela-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    background: white;
+    border-radius: 12px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    background: white;
 }
 
 thead {
@@ -488,6 +598,10 @@ th, td {
     padding: 12px;
     text-align: center;
     border-bottom: 1px solid #ddd;
+}
+
+tbody tr:hover {
+    background-color: #f5f5f5;
 }
 
 button.editar-btn, button.excluir-btn {
@@ -514,195 +628,10 @@ button.excluir-btn {
     display: flex;
     gap: 5px;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
-/* ===== VERSÃO MOBILE EXCLUSIVA PARA ABA GERAL ===== */
-@media (max-width: 768px) {
-    /* Container da tabela geral */
-    #abaGeral .tabela-container {
-        overflow-x: visible;
-    }
-    
-    /* Converte tabela para cards no mobile APENAS na aba geral */
-    #abaGeral table,
-    #abaGeral thead,
-    #abaGeral tbody,
-    #abaGeral th,
-    #abaGeral td,
-    #abaGeral tr {
-        display: block;
-    }
-    
-    #abaGeral thead {
-        display: none;
-    }
-    
-    #abaGeral tr {
-        margin-bottom: 16px;
-        border: 1px solid #e0e0e0;
-        border-radius: 16px;
-        background: white;
-        padding: 0;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        overflow: hidden;
-    }
-    
-    /* Card header com a descrição em destaque */
-    #abaGeral td:first-child {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        font-weight: bold;
-        font-size: 14px;
-        padding: 14px 12px;
-        margin: 0;
-        border-bottom: none;
-        display: block;
-        text-align: left;
-    }
-    
-    #abaGeral td:first-child::before {
-        display: none;
-    }
-    
-    /* Demais campos do card */
-    #abaGeral td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 12px;
-        border-bottom: 1px solid #f0f0f0;
-        text-align: right;
-        gap: 12px;
-        background: white;
-    }
-    
-    #abaGeral td:last-child {
-        border-bottom: none;
-        background: #f8f9fa;
-        border-top: 1px solid #e0e0e0;
-    }
-    
-    #abaGeral td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        text-align: left;
-        flex: 1;
-        font-size: 12px;
-        color: #666;
-    }
-    
-    /* Botões de ação no mobile */
-    #abaGeral .acao-botoes {
-        display: flex;
-        gap: 10px;
-        justify-content: space-between;
-        width: 100%;
-    }
-    
-    #abaGeral .acao-botoes::before {
-        content: "⚡ Ações";
-        font-weight: 600;
-        color: #555;
-    }
-    
-    #abaGeral button.editar-btn,
-    #abaGeral button.excluir-btn {
-        flex: 1;
-        padding: 8px 12px;
-        font-size: 13px;
-        border-radius: 8px;
-    }
-    
-    /* Valor em destaque no card */
-    #abaGeral td:nth-child(2) {
-        font-weight: bold;
-        font-size: 15px;
-    }
-    
-    /* Ajuste para cards de benefícios e fatura no mobile */
-    .fatura-cards {
-        grid-template-columns: 1fr;
-    }
-    
-    .beneficio-card, .fatura-cards .card {
-        min-width: auto;
-        padding: 15px;
-    }
-    
-    /* Ajuste para os filtros */
-    .filtros-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .filtro-datas, .filtro-valores {
-        flex-direction: column;
-    }
-    
-    .filtro-datas input, .filtro-valores input {
-        width: 100%;
-    }
-    
-    .filtro-actions {
-        flex-direction: column;
-    }
-    
-    .btn-aplicar, .btn-limpar {
-        width: 100%;
-    }
-    
-    /* Ajuste do formulário */
-    form {
-        flex-direction: column;
-    }
-    
-    form input, form select, form button {
-        width: 100%;
-    }
-    
-    input[type="date"] {
-        width: 100%;
-        padding: 12px;
-        font-size: 16px;
-    }
-    
-    /* Ajuste do header */
-    .user-info {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
-    
-    .user-info div {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    
-    .btn-cores, .btn-perfil-sistema, .btn-logout {
-        margin: 5px;
-    }
-    
-    /* Ajuste das abas */
-    .abas button {
-        flex: 1;
-        text-align: center;
-        font-size: 14px;
-        padding: 10px;
-    }
-    
-    /* Resultado area */
-    .resultado-area {
-        margin-top: 10px;
-        padding: 12px;
-    }
-    
-    .resultado-header {
-        margin-bottom: 10px;
-        padding-bottom: 8px;
-    }
-}
-
-/* CARDS */
+/* CARDS DE BENEFÍCIOS E FATURA */
 .fatura-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -747,7 +676,7 @@ button.excluir-btn {
     margin-top: 8px;
 }
 
-/* FILTROS CONTAINER */
+/* FILTROS AVANÇADOS */
 .filtro-container {
     background: #f5f6fa;
     border-radius: 12px;
@@ -837,6 +766,7 @@ button.excluir-btn {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .btn-aplicar { background: linear-gradient(135deg, #00b09b, #96c93d); color: white; }
@@ -871,14 +801,13 @@ button.excluir-btn {
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.5);
+    overflow-y: auto;
 }
 
 .modal-content {
     background-color: white;
     position: relative;
-    margin: 0 auto;
-    top: 50%;
-    transform: translateY(-50%);
+    margin: 10% auto;
     border-radius: 12px;
     width: 90%;
     max-width: 500px;
@@ -896,6 +825,7 @@ button.excluir-btn {
     display: flex;
     gap: 10px;
     margin-top: 20px;
+    flex-wrap: wrap;
 }
 
 .btn-salvar, .btn-cancelar {
@@ -905,6 +835,7 @@ button.excluir-btn {
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
+    min-width: 100px;
 }
 
 .btn-salvar { background: linear-gradient(135deg, #00b09b, #96c93d); color: white; }
@@ -963,6 +894,7 @@ button.excluir-btn {
     display: flex;
     gap: 8px;
     margin-bottom: 8px;
+    flex-wrap: wrap;
 }
 
 .config-input {
@@ -970,6 +902,7 @@ button.excluir-btn {
     padding: 8px 12px;
     border: 1px solid #ddd;
     border-radius: 6px;
+    min-width: 150px;
 }
 
 .btn-remover {
@@ -991,6 +924,7 @@ button.excluir-btn {
     width: 100%;
 }
 
+/* PERFIL */
 .perfil-menu {
     display: flex;
     gap: 10px;
@@ -1005,12 +939,12 @@ button.excluir-btn {
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
+    min-width: 120px;
 }
 
 .btn-perfil { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
 .btn-perfil-voltar { background: #333; color: white; }
 
-/* PERFIL ESTILIZADO */
 .perfil-info {
     background: #f8f9fa;
     padding: 20px;
@@ -1052,6 +986,7 @@ button.excluir-btn {
     background: white;
     border-radius: 8px;
     color: #555;
+    word-break: break-word;
 }
 
 .perfil-info ul {
@@ -1157,6 +1092,7 @@ button.excluir-btn {
     border-radius: 10px;
     border: 1px solid #e9ecef;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .item-cor-modern span {
@@ -1178,8 +1114,228 @@ button.excluir-btn {
     flex-shrink: 0;
 }
 
-/* RESPONSIVIDADE ADICIONAL */
+/* ESTILOS ADICIONAIS */
+.beneficio-card .detalhe,
+.fatura-cards .card .detalhe {
+    font-size: 10px !important;
+    opacity: 0.8 !important;
+    margin-top: 8px !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.fatura-cards .card p:nth-child(3) {
+    font-size: 14px;
+    margin-top: 5px;
+    opacity: 0.95;
+}
+
+.fatura-cards .card p:nth-child(3) span {
+    font-weight: bold;
+    color: white !important;
+}
+
+/* ===== VERSÃO MOBILE ===== */
 @media (max-width: 768px) {
+    /* Container da tabela geral */
+    #abaGeral .tabela-container {
+        overflow-x: visible;
+    }
+    
+    /* Converte tabela para cards no mobile APENAS na aba geral */
+    #abaGeral table,
+    #abaGeral thead,
+    #abaGeral tbody,
+    #abaGeral th,
+    #abaGeral td,
+    #abaGeral tr {
+        display: block;
+    }
+    
+    #abaGeral thead {
+        display: none;
+    }
+    
+    #abaGeral tr {
+        margin-bottom: 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 16px;
+        background: white;
+        padding: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+    
+    /* Card header com a descrição em destaque */
+    #abaGeral td:first-child {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 14px 12px;
+        margin: 0;
+        border-bottom: none;
+        display: block;
+        text-align: left;
+    }
+    
+    #abaGeral td:first-child::before {
+        display: none;
+    }
+    
+    /* Demais campos do card */
+    #abaGeral td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        border-bottom: 1px solid #f0f0f0;
+        text-align: right;
+        gap: 12px;
+        background: white;
+    }
+    
+    #abaGeral td:last-child {
+        border-bottom: none;
+        background: #f8f9fa;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    #abaGeral td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        text-align: left;
+        flex: 1;
+        font-size: 12px;
+        color: #666;
+    }
+    
+    /* Botões de ação no mobile */
+    #abaGeral .acao-botoes {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    #abaGeral .acao-botoes::before {
+        content: "⚡ Ações";
+        font-weight: 600;
+        color: #555;
+    }
+    
+    #abaGeral button.editar-btn,
+    #abaGeral button.excluir-btn {
+        flex: 1;
+        padding: 8px 12px;
+        font-size: 13px;
+        border-radius: 8px;
+    }
+    
+    /* Valor em destaque no card */
+    #abaGeral td:nth-child(2) {
+        font-weight: bold;
+        font-size: 15px;
+    }
+    
+    /* Ajuste dos filtros no mobile */
+    .abas button {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    
+    #filtrosContainer {
+        max-height: 350px;
+    }
+    
+    #filtroBanco, #filtroModalidade, #filtroTipo {
+        max-height: 120px;
+    }
+    
+    .checkbox-group label {
+        width: 100%;
+        justify-content: space-between;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    /* Contador de resultados */
+    #contadorResultados {
+        font-size: 12px;
+        padding: 10px 15px;
+    }
+    
+    /* Cards de benefícios e fatura */
+    .fatura-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .beneficio-card, .fatura-cards .card {
+        min-width: auto;
+        padding: 15px;
+    }
+    
+    /* Filtros avançados */
+    .filtros-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filtro-datas, .filtro-valores {
+        flex-direction: column;
+    }
+    
+    .filtro-datas input, .filtro-valores input {
+        width: 100%;
+    }
+    
+    .filtro-actions {
+        flex-direction: column;
+    }
+    
+    .btn-aplicar, .btn-limpar {
+        width: 100%;
+    }
+    
+    /* Formulário */
+    form {
+        flex-direction: column;
+    }
+    
+    form input, form select, form button {
+        width: 100%;
+    }
+    
+    input[type="date"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    /* Header */
+    .user-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .user-info div {
+        justify-content: center;
+    }
+    
+    .btn-cores, .btn-perfil-sistema, .btn-logout {
+        margin: 0;
+    }
+    
+    /* Resultado area */
+    .resultado-area {
+        margin-top: 10px;
+        padding: 12px;
+    }
+    
+    .resultado-header {
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+    }
+    
+    /* Container principal */
     .container {
         padding: 15px;
     }
@@ -1192,6 +1348,7 @@ button.excluir-btn {
         min-width: auto;
     }
     
+    /* Cores */
     .cores-grid-modern {
         grid-template-columns: 1fr;
         gap: 10px;
@@ -1205,6 +1362,7 @@ button.excluir-btn {
         white-space: normal;
     }
     
+    /* Configurações */
     .config-section {
         padding: 15px;
     }
@@ -1214,42 +1372,110 @@ button.excluir-btn {
         font-size: 11px;
     }
     
+    /* Modal */
     .modal-content {
         width: 95%;
         padding: 15px;
         max-height: 90vh;
         overflow-y: auto;
+        margin: 10% auto;
     }
     
     .perfil-menu {
         flex-direction: column;
     }
     
+    /* Inputs e botões para toque */
     input, select, button {
         font-size: 16px !important;
+        min-height: 44px;
+    }
+    
+    /* Perfil */
+    .perfil-info ul {
+        flex-direction: column;
+    }
+    
+    .perfil-info li {
+        width: 100%;
+        text-align: center;
     }
 }
 
-@media (max-width: 375px) {
-    .container {
+/* Telas muito pequenas */
+@media (max-width: 480px) {
+    body {
         padding: 10px;
     }
     
-    .card {
+    .container {
         padding: 12px;
     }
     
+    .card {
+        padding: 15px;
+    }
+    
     .card p {
-        font-size: 18px;
+        font-size: 20px;
     }
     
     .btn-cores, .btn-perfil-sistema, .btn-logout {
-        padding: 6px 12px;
-        font-size: 11px;
+        padding: 8px 12px;
+        font-size: 12px;
     }
     
     .user-info span {
         font-size: 14px;
+    }
+    
+    .config-section {
+        padding: 12px;
+    }
+    
+    .btn-sugestao {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .login-container {
+        padding: 25px;
+    }
+    
+    .login-header h1 {
+        font-size: 24px;
+    }
+    
+    #filtrosContainer {
+        max-height: 300px;
+    }
+    
+    #filtroBanco, #filtroModalidade, #filtroTipo {
+        max-height: 100px;
+    }
+}
+
+/* Orientação landscape (horizontal) */
+@media (max-width: 900px) and (orientation: landscape) {
+    .tela-login .login-container {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .modal-content {
+        margin: 5% auto;
+    }
+    
+    .perfil-info {
+        max-height: 300px;
+    }
+    
+    #filtrosContainer {
+        max-height: 250px;
+    }
+    
+    #filtroBanco, #filtroModalidade, #filtroTipo {
+        max-height: 80px;
     }
 }
 
@@ -1265,89 +1491,5 @@ button.excluir-btn {
     }
     .btn-logout, .btn-perfil-sistema, .btn-cores, .abas button, form, .checkbox-group, .filtro-container {
         display: none;
-    }
-}
-
-/* FORÇAR MESMO ESTILO NOS TEXTOS DOS CARDS (linha 850-860) */
-.beneficio-card .detalhe,
-.fatura-cards .card .detalhe {
-    font-size: 10px !important;
-    opacity: 0.8 !important;
-    margin-top: 8px !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-}
-
-/* ESTILO PARA O SALDO DENTRO DO CARD DE FATURA */
-.fatura-cards .card p:nth-child(3) {
-    font-size: 14px;
-    margin-top: 5px;
-    opacity: 0.95;
-}
-
-.fatura-cards .card p:nth-child(3) span {
-    font-weight: bold;
-}
-
-/* COR BRANCA PARA O SALDO NO CARD */
-.fatura-cards .card p:nth-child(3) span {
-    color: white !important;
-}
-
-@media (max-width: 768px) {
-    input, select, button {
-        min-height: 48px;
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 768px) {
-    form select {
-        width: 100%;
-    }
-}
-
-@media (max-width: 768px) {
-    form button {
-        width: 100%;
-        font-size: 16px;
-        padding: 14px;
-    }
-}
-
-@media (max-width: 768px) {
-    .checkbox-group label {
-        width: 100%;
-        justify-content: space-between;
-        padding: 12px 16px;
-    }
-}
-
-@media (max-width: 768px) {
-    .beneficio-card, .fatura-cards .card {
-        width: 100%;
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 768px) {
-    .user-info div {
-        gap: 8px;
-    }
-
-    .btn-cores, .btn-perfil-sistema, .btn-logout {
-        flex: 1;
-        padding: 10px;
-    }
-}
-
-@media (max-width: 768px) {
-    input[type="date"] {
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 768px) {
-    .container {
-        padding: 15px;
     }
 }
