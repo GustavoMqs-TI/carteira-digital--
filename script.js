@@ -53,47 +53,90 @@ function getSelecionados(id) {
     return Array.from(document.querySelectorAll(`#${id} input:checked`)).map(el => el.value);
 }
 
-// ===== FUNÇÃO PARA VALIDAR DUPLICADAS =====
-function validarItemUnico(listaId, novoValor, tipoItem) {
+// ===== FUNÇÃO PARA OBTER VALORES EXISTENTES =====
+function obterValoresExistentes(listaId, tipoItem) {
     const inputs = document.querySelectorAll(`#${listaId} .config-input`);
-    let valoresExistentes = [];
-    
+    let valores = [];
     inputs.forEach(input => {
-        let valorExistente = input.value.trim();
-        if (tipoItem === 'beneficio') {
-            valorExistente = valorExistente.toUpperCase();
+        let val = input.value.trim();
+        if (val !== '') {
+            if (tipoItem === 'beneficio') {
+                val = val.toUpperCase();
+            }
+            valores.push(val);
         }
-        valoresExistentes.push(valorExistente);
     });
-    
-    let valorParaComparar = novoValor.trim();
-    if (tipoItem === 'beneficio') {
-        valorParaComparar = valorParaComparar.toUpperCase();
-    }
-    
-    if (valoresExistentes.includes(valorParaComparar)) {
-        alert(`❌ ${tipoItem === 'beneficio' ? 'Benefício' : 'Banco'} "${novoValor}" já existe!`);
-        return false;
-    }
-    return true;
+    return valores;
 }
 
-// ===== FUNÇÕES PARA ADICIONAR ITENS COM VALIDAÇÃO =====
+// ===== FUNÇÃO PARA VALIDAR SE ITEM É ÚNICO =====
+function validarItemUnico(listaId, novoValor, tipoItem, elementoAtual = null) {
+    if (!novoValor || novoValor.trim() === '') {
+        alert(`❌ Digite um nome válido!`);
+        return false;
+    }
+    
+    const inputs = document.querySelectorAll(`#${listaId} .config-input`);
+    let valores = [];
+
+    inputs.forEach(input => {
+        if (elementoAtual && input === elementoAtual) return; // IGNORA O PRÓPRIO INPUT
+
+        let val = input.value.trim();
+        if (val !== '') {
+            if (tipoItem === 'beneficio') {
+                val = val.toUpperCase();
+            }
+            valores.push(val);
+        }
+    });
+
+    let valorComparar = novoValor.trim();
+    if (tipoItem === 'beneficio') {
+        valorComparar = valorComparar.toUpperCase();
+    }
+
+    if (valores.includes(valorComparar)) {
+        let nomeItem = tipoItem === 'beneficio' 
+            ? 'Benefício' 
+            : (tipoItem === 'banco' ? 'Banco' : 'Forma de pagamento');
+
+        alert(`❌ ${nomeItem} "${novoValor}" já existe!`);
+        return false;
+    }
+
+    return true;
+}
+// ===== FUNÇÃO PARA ADICIONAR ITEM VIA BOTÃO "ADICIONAR" =====
 function adicionarItemConfig(listaId) {
     const lista = document.getElementById(listaId);
+    if (!lista) {
+        console.error("Lista não encontrada:", listaId);
+        return;
+    }
+    
+    let tipoItem = 'banco';
+    if (listaId.includes('Beneficios')) tipoItem = 'beneficio';
+    else if (listaId.includes('Modalidades')) tipoItem = 'modalidade';
+    
     const div = document.createElement("div");
     div.className = "config-item";
     
     const input = document.createElement("input");
     input.type = "text";
     input.className = "config-input";
+    input.placeholder = "Digite o nome...";
     
-    const tipoItem = listaId.includes('Beneficios') ? 'beneficio' : 'banco';
+    // Salvar o valor anterior para validação no blur
+    let valorAnterior = '';
     
     input.addEventListener('blur', function() {
-        if (this.value.trim() !== '') {
-            if (!validarItemUnico(listaId, this.value, tipoItem)) {
-                this.value = '';
+        const novoValor = this.value.trim();
+        if (novoValor !== '' && novoValor !== valorAnterior) {
+            if (!validarItemUnico(listaId, novoValor, tipoItem, this)) {
+                this.value = valorAnterior;
+            } else {
+                valorAnterior = novoValor;
             }
         }
     });
@@ -110,14 +153,34 @@ function adicionarItemConfig(listaId) {
     input.focus();
 }
 
+// ===== FUNÇÃO PARA ADICIONAR SUGESTÃO (BOTÕES AZUIS) =====
 function adicionarSugestao(listaId, valor) {
-    const tipoItem = listaId.includes('Beneficios') ? 'beneficio' : 'banco';
+    let tipoItem = 'banco';
+    if (listaId.includes('Beneficios')) tipoItem = 'beneficio';
+    else if (listaId.includes('Modalidades')) tipoItem = 'modalidade';
     
+    // Validar se já existe
     if (!validarItemUnico(listaId, valor, tipoItem)) {
         return;
     }
     
     const lista = document.getElementById(listaId);
+    if (!lista) return;
+    
+    // Verificar novamente se já existe (por segurança)
+    const inputsExistentes = lista.querySelectorAll('.config-input');
+    let valorComparar = valor.trim();
+    if (tipoItem === 'beneficio') valorComparar = valorComparar.toUpperCase();
+    
+    for (let inp of inputsExistentes) {
+        let val = inp.value.trim();
+        if (tipoItem === 'beneficio') val = val.toUpperCase();
+        if (val === valorComparar) {
+            alert(`❌ ${tipoItem === 'beneficio' ? 'Benefício' : tipoItem === 'banco' ? 'Banco' : 'Forma de pagamento'} "${valor}" já existe!`);
+            return;
+        }
+    }
+    
     const div = document.createElement("div");
     div.className = "config-item";
     
@@ -126,31 +189,18 @@ function adicionarSugestao(listaId, valor) {
     input.className = "config-input";
     input.value = valor;
     
+    let valorAnterior = valor;
+    
     input.addEventListener('blur', function() {
-        const valorAntigo = this.getAttribute('data-valor-anterior') || '';
-        if (this.value.trim() !== '' && this.value.trim() !== valorAntigo) {
-            const inputs = document.querySelectorAll(`#${listaId} .config-input`);
-            let valoresExistentes = [];
-            inputs.forEach(inp => {
-                if (inp !== this) {
-                    let val = inp.value.trim();
-                    if (tipoItem === 'beneficio') val = val.toUpperCase();
-                    valoresExistentes.push(val);
-                }
-            });
-            
-            let novoValor = this.value.trim();
-            if (tipoItem === 'beneficio') novoValor = novoValor.toUpperCase();
-            
-            if (valoresExistentes.includes(novoValor)) {
-                alert(`❌ ${tipoItem === 'beneficio' ? 'Benefício' : 'Banco'} "${this.value}" já existe!`);
-                this.value = valorAntigo;
+        const novoValor = this.value.trim();
+        if (novoValor !== '' && novoValor !== valorAnterior) {
+            if (!validarItemUnico(listaId, novoValor, tipoItem, this)) {
+                this.value = valorAnterior;
             } else {
-                this.setAttribute('data-valor-anterior', this.value);
+                valorAnterior = novoValor;
             }
         }
     });
-    input.setAttribute('data-valor-anterior', valor);
     
     const btnRemover = document.createElement("button");
     btnRemover.type = "button";
@@ -163,9 +213,17 @@ function adicionarSugestao(listaId, valor) {
     lista.appendChild(div);
 }
 
+// ===== FUNÇÃO PARA REMOVER ITEM =====
 function removerItemConfig(btn) { 
-    btn.parentElement.remove(); 
+    if (btn && btn.parentElement) {
+        btn.parentElement.remove(); 
+    }
 }
+
+// EXPOR FUNÇÕES PARA O ESCOPO GLOBAL
+window.adicionarItemConfig = adicionarItemConfig;
+window.adicionarSugestao = adicionarSugestao;
+window.removerItemConfig = removerItemConfig;
 
 // ===== CONFIGURAÇÕES =====
 function carregarConfiguracoes(userId) {
@@ -266,43 +324,43 @@ function aplicarConfiguracoes() {
         const cores = ['#00b09b', '#ff416c', '#2193b0', '#6a11cb', '#ff8008', '#1D976C', '#F2994A', '#cb2d3e'];
         configUsuario.beneficios.forEach((b, i) => {
             const cor = coresPersonalizadas.beneficios[b] || cores[i % cores.length];
-            container.innerHTML += `<div class="beneficio-card" onclick="filtrarBeneficio('${b}')" style="background: linear-gradient(135deg, ${cor}, ${cor});"><h3>${b}</h3><p>Saldo: <span id="saldo_${b}">R$ 0</span></p><p class="detalhe">👆 Clique para ver transações</p></div>`;
+            container.innerHTML += `<div class="beneficio-card" onclick="filtrarBeneficio('${b.replace(/'/g, "\\'")}')" style="background: linear-gradient(135deg, ${cor}, ${cor});"><h3>${b}</h3><p>Saldo: <span id="saldo_${b.replace(/\s/g, '_')}">R$ 0</span></p><p class="detalhe">👆 Clique para ver transações</p></div>`;
         });
     }
     
-  //====CARDS DE FATURA COM SALDO DO BANCO====
-   const faturaContainer = document.getElementById("faturaContainer");
-if(faturaContainer) {
-    faturaContainer.innerHTML = '';
-    const coresFatura = ['#8E2DE2', '#FF8008', '#CB2D3E', '#1D976C', '#F2994A', '#FF6B6B', '#FF7E5F', '#00B4DB'];
-    configUsuario.bancos.forEach((b, i) => {
-        const cor = coresPersonalizadas.bancos[b] || coresFatura[i % coresFatura.length];
-        
-        // Calcula o saldo do banco (entradas - saídas que não são crédito)
-        let saldoBanco = 0;
-        principal.forEach(item => {
-            if(item.banco === b) {
-                // Ignora benefícios no cálculo do saldo do banco
-                if(!configUsuario.beneficios.includes(item.modalidade)) {
-                    if(item.tipo === "entrada") {
-                        saldoBanco += item.valor;
-                    } else if(item.tipo === "saida" && item.modalidade !== "Crédito") {
-                        saldoBanco -= item.valor;
+    //====CARDS DE FATURA COM SALDO DO BANCO====
+    const faturaContainer = document.getElementById("faturaContainer");
+    if(faturaContainer) {
+        faturaContainer.innerHTML = '';
+        const coresFatura = ['#8E2DE2', '#FF8008', '#CB2D3E', '#1D976C', '#F2994A', '#FF6B6B', '#FF7E5F', '#00B4DB'];
+        configUsuario.bancos.forEach((b, i) => {
+            const cor = coresPersonalizadas.bancos[b] || coresFatura[i % coresFatura.length];
+            
+            // Calcula o saldo do banco (entradas - saídas que não são crédito)
+            let saldoBanco = 0;
+            principal.forEach(item => {
+                if(item.banco === b) {
+                    // Ignora benefícios no cálculo do saldo do banco
+                    if(!configUsuario.beneficios.includes(item.modalidade)) {
+                        if(item.tipo === "entrada") {
+                            saldoBanco += item.valor;
+                        } else if(item.tipo === "saida" && item.modalidade !== "Crédito") {
+                            saldoBanco -= item.valor;
+                        }
                     }
                 }
-            }
+            });
+            
+            faturaContainer.innerHTML += `
+                <div class="card" onclick="filtrarBancoCredito('${b.replace(/'/g, "\\'")}')" style="background: linear-gradient(135deg, ${cor}, ${cor}); cursor: pointer;">
+                    <h3>${b}</h3>
+                    <p>Fatura: <span id="fatura_${b.replace(/\s/g, '_')}">R$ 0</span></p>
+                    <p>Saldo: <span id="saldo_${b.replace(/\s/g, '_')}" style="font-size: 14px; opacity: 0.9;">R$ 0</span></p>
+                    <p class="detalhe">👆 Clique para ver compras</p>
+                </div>
+            `;
         });
-        
-        faturaContainer.innerHTML += `
-            <div class="card" onclick="filtrarBancoCredito('${b}')" style="background: linear-gradient(135deg, ${cor}, ${cor}); cursor: pointer;">
-                <h3>${b}</h3>
-                <p>Fatura: <span id="fatura_${b.replace(/\s/g, '_')}">R$ 0</span></p>
-                <p>Saldo: <span id="saldo_${b.replace(/\s/g, '_')}" style="font-size: 14px; opacity: 0.9;">R$ 0</span></p>
-                <p class="detalhe">👆 Clique para ver compras</p>
-            </div>
-        `;
-    });
-}
+    }
     
     carregarCoresPersonalizadas();
 }
@@ -316,7 +374,7 @@ function atualizarBeneficiosDinamico() {
             else if(item.tipo === "saida") saldos[item.modalidade] -= item.valor;
         }
     });
-    configUsuario.beneficios.forEach(b => { let span = document.getElementById(`saldo_${b}`); if(span) span.textContent = formatarMoeda(saldos[b]); });
+    configUsuario.beneficios.forEach(b => { let span = document.getElementById(`saldo_${b.replace(/\s/g, '_')}`); if(span) span.textContent = formatarMoeda(saldos[b]); });
 }
 
 // FUNÇÃO PARA ATUALIZAR O SALDO DOS BANCOS
@@ -430,6 +488,12 @@ document.getElementById("formConfiguracao").onsubmit = function(e) {
     const beneficiosUnicos = [...new Set(beneficios)];
     if (beneficios.length > 0 && beneficiosUnicos.length !== beneficios.length) {
         alert("❌ Não é permitido ter benefícios com nomes iguais!");
+        return;
+    }
+    
+    const modalidadesUnicas = [...new Set(modalidades)];
+    if (modalidadesUnicas.length !== modalidades.length) {
+        alert("❌ Não é permitido ter formas de pagamento com nomes iguais!");
         return;
     }
     
@@ -610,7 +674,7 @@ function atualizarTabela() {
     atualizarResumo();
     atualizarBeneficiosDinamico();
     atualizarFatura();
-   atualizarSaldoBancos();
+    atualizarSaldoBancos();
     adicionarDataLabels();
 }
 
@@ -674,7 +738,7 @@ function atualizarTabelaBeneficio(transacoes) {
     if(!listaBeneficioFiltrado) return;
     listaBeneficioFiltrado.innerHTML = "";
     if(!transacoes.length) { 
-        listaBeneficioFiltrado.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px;">📭 Nenhuma transação encontrada</td></tr>`; 
+        listaBeneficioFiltrado.innerHTML = `<td><td colspan="4" style="text-align: center; padding: 20px;">📭 Nenhuma transação encontrada</td></tr>`; 
         adicionarDataLabels(); 
         return; 
     }
@@ -760,14 +824,14 @@ function atualizarFatura() {
     configUsuario.bancos.forEach(b => { let span = document.getElementById(`fatura_${b.replace(/\s/g, '_')}`); if(span) span.textContent = formatarMoeda(totais[b] || 0); });
     
     // ATUALIZA O SALDO DOS BANCOS TAMBÉM
-    atualizarSaldoBancos();  // <-- ADICIONE ESTA LINHA
+    atualizarSaldoBancos();
     
     if(!bancoSelecionadoFatura) {
         document.getElementById("tituloFaturaFiltro").innerHTML = "Compras no Crédito (pendentes)";
         document.getElementById("filtroBancoAtivo").innerHTML = "";
         const compras = principal.filter(i => i.modalidade === "Crédito" && i.tipo === "saida");
         listaFatura.innerHTML = "";
-        if(!compras.length) listaFatura.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px;">📭 Nenhuma compra encontrada</td>`;
+        if(!compras.length) listaFatura.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px;">📭 Nenhuma compra encontrada</td></tr>`;
         else compras.forEach(i => { 
             const row = listaFatura.insertRow(); 
             row.innerHTML = `
